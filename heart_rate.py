@@ -26,37 +26,35 @@ import dbus
 from utils.gap.advertisement import Advertisement
 from utils.gatt.profile import Application, Service, Characteristic, Descriptor
 from gpiozero import CPUTemperature
+import math
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
 
-class ThermometerAdvertisement(Advertisement):
+class HERLParacycleAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        self.add_local_name("Thermometer")
+        self.add_local_name("HERL Paracycle")
         self.include_tx_power = True
 
 
-class ThermometerService(Service):
-    THERMOMETER_SVC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
+class HERLHeartRateService(Service):
+    HERL_HEART_RATE_SVC_UUID = "0x180D"
 
     def __init__(self, index):
-        self.farenheit = True
+        self.units = "BPM"
 
-        Service.__init__(self, index, self.THERMOMETER_SVC_UUID, True)
-        self.add_characteristic(TempCharacteristic(self))
-        self.add_characteristic(UnitCharacteristic(self))
+        Service.__init__(self, index, self.HERL_HEART_RATE_SVC_UUID, True)
+        self.add_characteristic(HeartRateMeasurementCharacteristic(self))
+        self.add_characteristic(HeartRateUnitCharacteristic(self))
 
-    def is_farenheit(self):
-        return self.farenheit
-
-    def set_farenheit(self, farenheit):
-        self.farenheit = farenheit
+    def get_units(self):
+        return self.units
 
 
-class TempCharacteristic(Characteristic):
-    TEMP_CHARACTERISTIC_UUID = "00000002-710e-4a5b-8d75-3e5b444bc3cf"
+class HeartRateMeasurementCharacteristic(Characteristic):
+    TEMP_CHARACTERISTIC_UUID = "0x2A37"
 
     def __init__(self, service):
         self.notifying = False
@@ -64,27 +62,25 @@ class TempCharacteristic(Characteristic):
         Characteristic.__init__(
             self, self.TEMP_CHARACTERISTIC_UUID,
             ["notify", "read"], service)
-        self.add_descriptor(TempDescriptor(self))
+        self.add_descriptor(HeartRateDescriptor(self))
 
-    def get_temperature(self):
+    def get_heartrate(self):
         value = []
-        unit = "C"
 
         cpu = CPUTemperature()
         temp = cpu.temperature
         if self.service.is_farenheit():
             temp = (temp * 1.8) + 32
-            unit = "F"
 
-        strtemp = str(round(temp, 1)) + " " + unit
-        for c in strtemp:
+        heartbeat_simulated = str(math.floor(temp))
+        for c in heartbeat_simulated:
             value.append(dbus.Byte(c.encode()))
 
         return value
 
-    def set_temperature_callback(self):
+    def set_heartrate_callback(self):
         if self.notifying:
-            value = self.get_temperature()
+            value = self.get_heartrate()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -95,32 +91,32 @@ class TempCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = self.get_temperature()
+        value = self.get_heartrate()
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_temperature_callback)
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
 
     def StopNotify(self):
         self.notifying = False
 
     def ReadValue(self, options):
-        value = self.get_temperature()
+        value = self.get_heartrate()
 
         return value
 
 
-class TempDescriptor(Descriptor):
-    TEMP_DESCRIPTOR_UUID = "2901"
-    TEMP_DESCRIPTOR_VALUE = "CPU Temperature"
+class HeartRateDescriptor(Descriptor):
+    HEARTRATE_DESCRIPTOR_UUID = "2901"
+    HEARTRATE_DESCRIPTOR_VALUE = "Heart Rate"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-            self, self.TEMP_DESCRIPTOR_UUID,
+            self, self.HEARTRATE_DESCRIPTOR_UUID,
             ["read"],
             characteristic)
 
     def ReadValue(self, options):
         value = []
-        desc = self.TEMP_DESCRIPTOR_VALUE
+        desc = self.HEARTRATE_DESCRIPTOR_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -128,37 +124,30 @@ class TempDescriptor(Descriptor):
         return value
 
 
-class UnitCharacteristic(Characteristic):
-    UNIT_CHARACTERISTIC_UUID = "00000003-710e-4a5b-8d75-3e5b444bc3cf"
+class HeartRateUnitCharacteristic(Characteristic):
+    UNIT_CHARACTERISTIC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
 
     def __init__(self, service):
         Characteristic.__init__(
             self, self.UNIT_CHARACTERISTIC_UUID,
             ["read", "write"], service)
-        self.add_descriptor(UnitDescriptor(self))
+        self.add_descriptor(HeartRateUnitDescriptor(self))
 
     def WriteValue(self, value, options):
         val = str(value[0]).upper()
-        if val == "C":
-            self.service.set_farenheit(False)
-        elif val == "F":
-            self.service.set_farenheit(True)
 
     def ReadValue(self, options):
         value = []
 
-        if self.service.is_farenheit():
-            val = "F"
-        else:
-            val = "C"
+        val = "BPM"
         value.append(dbus.Byte(val.encode()))
 
         return value
 
 
-class UnitDescriptor(Descriptor):
+class HeartRateUnitDescriptor(Descriptor):
     UNIT_DESCRIPTOR_UUID = "2901"
-    UNIT_DESCRIPTOR_VALUE = "Temperature Units (F or C)"
+    UNIT_DESCRIPTOR_VALUE = "Beats Per Minute (BPM)"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -176,14 +165,15 @@ class UnitDescriptor(Descriptor):
         return value
 
 
-app = Application()
-app.add_service(ThermometerService(0))
-app.register()
+if __name__ == '__main__':
+    app = Application()
+    app.add_service(HERLHeartRateService(0))
+    app.register()
 
-adv = ThermometerAdvertisement(0)
-adv.register()
+    adv = HERLParacycleAdvertisement(0)
+    adv.register()
 
-try:
-    app.run()
-except KeyboardInterrupt:
-    app.quit()
+    try:
+        app.run()
+    except KeyboardInterrupt:
+        app.quit()
