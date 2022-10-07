@@ -36,6 +36,7 @@ DBUS_PROP_IFACE = "org.freedesktop.DBus.Properties"
 GATT_SERVICE_IFACE = "org.bluez.GattService1"
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 GATT_DESC_IFACE = "org.bluez.GattDescriptor1"
+APP_NAME = "HERL Paracycle"
 
 
 class InvalidArgsException(dbus.exceptions.DBusException):
@@ -82,10 +83,10 @@ class Application(dbus.service.Object):
         return response
 
     def register_app_callback(self):
-        print("GATT application registered")
+        print(f"{APP_NAME} Application Registered")
 
     def register_app_error_callback(self, error):
-        print("Failed to register application: " + str(error))
+        print(f"Failed to register {APP_NAME} application: " + str(error))
 
     def register(self):
         adapter = BleTools.find_adapter(self.bus)
@@ -102,7 +103,7 @@ class Application(dbus.service.Object):
         self.mainloop.run()
 
     def quit(self):
-        print("\nGATT application terminated")
+        print(f"\n{APP_NAME} application terminated")
         self.mainloop.quit()
 
 
