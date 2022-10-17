@@ -47,22 +47,22 @@ class HERLHeartRateService(Service):
 
         Service.__init__(self, index, self.HERL_HEART_RATE_SVC_UUID, True)
         self.add_characteristic(HeartRateMeasurementCharacteristic(self))
-        self.add_characteristic(HeartRateUnitCharacteristic(self))
+        self.add_characteristic(BodySensorLocation(self))
 
     def get_units(self):
         return self.units
 
 
 class HeartRateMeasurementCharacteristic(Characteristic):
-    TEMP_CHARACTERISTIC_UUID = "0x2A37"
+    HEARTRATE_CHARACTERISTIC_UUID = "0x2A37"
 
     def __init__(self, service):
         self.notifying = False
 
         Characteristic.__init__(
-            self, self.TEMP_CHARACTERISTIC_UUID,
-            ["notify", "read"], service)
-        self.add_descriptor(HeartRateDescriptor(self))
+            self, self.HEARTRATE_CHARACTERISTIC_UUID,
+            ["notify"], service)
+        # self.add_descriptor(HeartRateDescriptor(self))
 
     def get_heartrate(self):
         value = []
@@ -80,7 +80,8 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
     def set_heartrate_callback(self):
         if self.notifying:
-            value = self.get_heartrate()
+            hval = 70
+            value = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -120,6 +121,23 @@ class HeartRateDescriptor(Descriptor):
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
+
+        return value
+
+
+class BodySensorLocation(Characteristic):
+    UNIT_CHARACTERISTIC_UUID = "0x2A38"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+            self, self.UNIT_CHARACTERISTIC_UUID,
+            ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+
+        val = "Chest"
+        value.append(dbus.Byte(val.encode()))
 
         return value
 
