@@ -244,7 +244,6 @@ class HeartRateUnitDescriptor(Descriptor):
 
 if __name__ == '__main__':
     app = Application()
-    app.add_service(GenericAccess(0))
     app.add_service(HERLHeartRateService(1))
     app.register()
 
