@@ -29,7 +29,7 @@ from gpiozero import CPUTemperature
 import math
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
-NOTIFY_TIMEOUT = 5000
+NOTIFY_TIMEOUT = 1000
 
 
 class HERLParacycleAdvertisement(Advertisement):
@@ -80,7 +80,11 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
     def get_heart_rate(self):
         hval = 80
-        return f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
+        resp = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
+        value = []
+        for c in resp:
+            value.append(dbus.Byte(c.encode()))
+        return value
 
     def set_heartrate_callback(self):
         if self.notifying:
