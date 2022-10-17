@@ -78,10 +78,13 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
         return value
 
+    def get_heart_rate(self):
+        hval = 80
+        return f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
+
     def set_heartrate_callback(self):
         if self.notifying:
-            hval = 70
-            value = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
+            value = self.get_heart_rate()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -92,7 +95,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = self.get_heartrate()
+        value = self.get_heart_rate()
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
 
@@ -100,7 +103,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
         self.notifying = False
 
     def ReadValue(self, options):
-        value = self.get_heartrate()
+        value = self.get_heart_rate()
 
         return value
 
