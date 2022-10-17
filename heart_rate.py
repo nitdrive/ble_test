@@ -20,6 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+import random
 
 import dbus
 
@@ -82,7 +83,8 @@ class HeartRateMeasurementCharacteristic(Characteristic):
         hval = 80
         resp = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
         value = []
-        for c in resp:
+        hrate = str(random.randrange(60, 120))
+        for c in hrate:
             value.append(dbus.Byte(c.encode()))
         return value
 
