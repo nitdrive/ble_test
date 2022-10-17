@@ -84,6 +84,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
         resp = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
         value = []
         hrate = str(random.randrange(60, 120))
+        print("Heart Rate:" + hrate)
         for c in hrate:
             value.append(dbus.Byte(c.encode()))
         return value
