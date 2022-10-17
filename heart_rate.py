@@ -67,31 +67,16 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
     def get_heartrate(self):
         value = []
-
-        cpu = CPUTemperature()
-        temp = cpu.temperature
-        if self.service.is_farenheit():
-            temp = (temp * 1.8) + 32
-
-        heartbeat_simulated = str(math.floor(temp))
-        for c in heartbeat_simulated:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
-
-    def get_heart_rate(self):
-        hval = 80
-        resp = f"Heart Rate Measurement: {hval} bpm, Contact is Detected, RR Interval: 743.16 ms"
-        value = []
-        hrate = str(random.randrange(60, 120))
-        print("Heart Rate:" + hrate)
-        for c in hrate:
-            value.append(dbus.Byte(c.encode()))
+        flags = bytes([224])
+        value.append(dbus.Byte(flags))
+        hrate = random.randrange(60, 120)
+        print("Heart Rate:" + str(hrate))
+        value.append(dbus.Byte(bytes([hrate])))
         return value
 
     def set_heartrate_callback(self):
         if self.notifying:
-            value = self.get_heart_rate()
+            value = self.get_heartrate()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -102,7 +87,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = self.get_heart_rate()
+        value = self.get_heartrate()
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
 
@@ -110,7 +95,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
         self.notifying = False
 
     def ReadValue(self, options):
-        value = self.get_heart_rate()
+        value = self.get_heartrate()
 
         return value
 

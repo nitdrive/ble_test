@@ -1,0 +1,32 @@
+import random
+
+
+def binary_to_decimal(binary):
+    binary1 = binary
+    decimal, i, n = 0, 0, 0
+    while binary != 0:
+        dec = binary % 10
+        decimal = decimal + dec * pow(2, i)
+        binary = binary // 10
+        i += 1
+
+    return decimal
+
+
+if __name__ == '__main__':
+    flag = 11100000
+    print(binary_to_decimal(flag))
+    value = []
+    flags = bytes([224])
+    value.append(flags)
+    hrate = random.randrange(60, 120)
+    print(hrate)
+    value.append(bytes([224, 125]))
+    print(value)
+    val = 125
+    print(val.to_bytes(2, 'little'))
+
+    valstring = str(val)
+    for c in valstring:
+        print(c.encode())
+
