@@ -40,6 +40,67 @@ class HERLParacycleAdvertisement(Advertisement):
         self.include_tx_power = True
 
 
+class GenericAccess(Service):
+    GenericAccessUUID = "0x1800"
+
+    def __init__(self, index):
+        Service.__init__(self, index, self.GenericAccessUUID, True)
+        self.add_characteristic(DeviceNameCharacteristic(self))
+        self.add_characteristic(AppearanceCharacteristic(self))
+        self.add_characteristic(PeripheralPreferredConnectionCharacteristic(self))
+
+
+class DeviceNameCharacteristic(Characteristic):
+    DeviceNameCharacteristic_UUID = "0x2A00"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+            self, self.DeviceNameCharacteristic_UUID,
+            ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+
+        val = "HERL HR"
+        value.append(dbus.Byte(val.encode()))
+
+        return value
+
+
+class AppearanceCharacteristic(Characteristic):
+    DeviceNameCharacteristic_UUID = "0x2A01"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+            self, self.DeviceNameCharacteristic_UUID,
+            ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+
+        val = bytes([833])
+        value.append(dbus.Byte(val))
+
+        return value
+
+
+class PeripheralPreferredConnectionCharacteristic(Characteristic):
+    PeripheralPreferredCharacteristic_UUID = "0x2A04"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+            self, self.PeripheralPreferredCharacteristic_UUID,
+            ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+
+        val = bytes([833])
+        value.append(dbus.Byte(val))
+
+        return value
+
+
 class HERLHeartRateService(Service):
     HERL_HEART_RATE_SVC_UUID = "0x180D"
 
@@ -180,7 +241,8 @@ class HeartRateUnitDescriptor(Descriptor):
 
 if __name__ == '__main__':
     app = Application()
-    app.add_service(HERLHeartRateService(0))
+    app.add_service(GenericAccess(0))
+    app.add_service(HERLHeartRateService(1))
     app.register()
 
     adv = HERLParacycleAdvertisement(0)
