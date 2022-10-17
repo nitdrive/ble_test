@@ -110,6 +110,7 @@ class HERLHeartRateService(Service):
         Service.__init__(self, index, self.HERL_HEART_RATE_SVC_UUID, True)
         self.add_characteristic(HeartRateMeasurementCharacteristic(self))
         self.add_characteristic(BodySensorLocation(self))
+        self.add_characteristic(HeartRateUnitCharacteristic(self))
 
     def get_units(self):
         return self.units
@@ -208,7 +209,9 @@ class HeartRateUnitCharacteristic(Characteristic):
         self.add_descriptor(HeartRateUnitDescriptor(self))
 
     def WriteValue(self, value, options):
-        val = str(value[0]).upper()
+        print("Received Value:")
+        print(value)
+        # val = str(value[0]).upper()
 
     def ReadValue(self, options):
         value = []
@@ -247,6 +250,8 @@ if __name__ == '__main__':
 
     adv = HERLParacycleAdvertisement(0)
     adv.register()
+
+    print(app.services)
 
     try:
         app.run()
