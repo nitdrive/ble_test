@@ -36,8 +36,9 @@ NOTIFY_TIMEOUT = 1000
 class HERLParacycleAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        self.add_local_name("HERL Paracycle")
+        self.add_local_name("HERL HRM")
         self.include_tx_power = True
+        self.add_service_uuid("0x180D")
 
 
 class GenericAccess(Service):

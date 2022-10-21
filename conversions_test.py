@@ -30,3 +30,6 @@ if __name__ == '__main__':
     for c in valstring:
         print(c.encode())
 
+    bytes_data = [104, 101, 108, 108, 111]
+    print("".join(map(chr, bytes_data)))
+
