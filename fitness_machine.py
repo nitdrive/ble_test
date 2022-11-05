@@ -44,9 +44,8 @@ class FitnessMachineFeature(Characteristic):
         # targetSettingFeatures =  00000000 00000000 11100000 00001100
         # fmfeaturesoctets = [00000011, 01000000, 00000000, 00000000]
         # targetSettingoctets = [00001100, 11100000, 00000000, 00000000]
-        values = [3, 64, 0, 0, 12, 224, 0, 0]
 
-        return bytes(values)
+        return bytes([3, 64, 0, 0, 12, 224, 0, 0])
 
 
 class TrainingStatus(Characteristic):
