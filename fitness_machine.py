@@ -28,6 +28,11 @@ class HERLFitnessMachineService(Service):
         Service.__init__(self, index, self.HERL_FITNESS_MACHINE_UUID, True)
         self.add_characteristic(FitnessMachineFeature(self))
         self.add_characteristic(TrainingStatus(self))
+        self.add_characteristic(FitnessMachineControlPoint(self))
+        self.add_characteristic(FitnessMachineStatus(self))
+        self.add_characteristic(IndoorBikeData(self))
+        self.add_characteristic(SupportedResistanceLevelRange(self))
+        self.add_characteristic(SupportedPowerRange(self))
 
 
 class FitnessMachineFeature(Characteristic):
