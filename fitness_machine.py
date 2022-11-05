@@ -24,13 +24,18 @@ class HERLFitnessMachineService(Service):
 
     def __init__(self, index):
         Service.__init__(self, index, self.HERL_FITNESS_MACHINE_UUID, True)
-        self.add_characteristic(HeartRateMeasurementCharacteristic(self))
-        self.add_characteristic(BodySensorLocation(self))
-        self.add_characteristic(HeartRateUnitCharacteristic(self))
+        self.add_characteristic(FitnessMachineFeature(self))
 
 
 class FitnessMachineFeature(Characteristic):
-    pass
+    FITNESS_MACHINE_FEATURE_UUID = "0x2ACC"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.FITNESS_MACHINE_FEATURE_UUID,
+            ["read"], service)
 
 
 class TrainingStatus(Characteristic):
