@@ -7,6 +7,7 @@ from utils.gatt.profile import Application, Service, Characteristic, Descriptor
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 500
+import struct
 
 
 class HERLParacycleAdvertisement(Advertisement):
@@ -184,7 +185,12 @@ class SupportedResistanceLevelRange(Characteristic):
             ["read"], service)
 
     def ReadValue(self, options):
-        return bytes([2])
+        minvalue = 0.0
+        maxvalue = 10.0
+        inc = 0.1
+        payload = struct.pack('<f', minvalue) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+
+        return payload
 
 
 class SupportedPowerRange(Characteristic):

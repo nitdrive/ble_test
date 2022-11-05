@@ -1,4 +1,5 @@
 import random
+import struct
 
 
 def binary_to_decimal(binary):
@@ -14,6 +15,13 @@ def binary_to_decimal(binary):
 
 
 if __name__ == '__main__':
+    minvalue = 0.0
+    maxvalue = 10.0
+    inc = 0.1
+    print([struct.pack('<f', minvalue), struct.pack('<f', maxvalue), struct.pack('<f', inc)])
+    payload = struct.pack('<f', minvalue) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+    print(payload)
+
     flag = 11100000
     print(binary_to_decimal(flag))
     value = []
