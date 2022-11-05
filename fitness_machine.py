@@ -188,7 +188,9 @@ class SupportedResistanceLevelRange(Characteristic):
         minvalue = 0.0
         maxvalue = 10.0
         inc = 0.1
-        payload = struct.pack('<f', minvalue) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+        # payload = struct.pack('<f', minvalue) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+
+        payload = b'1' + b'0' + b'.' + b'0' + b'0' + b'.' + b'0'
 
         return payload
 

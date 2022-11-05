@@ -22,6 +22,12 @@ if __name__ == '__main__':
     payload = bytes([0]) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
     print(payload)
 
+    payload = []
+    for c in "0.110.0":
+        payload.append(c.encode())
+
+    print(payload)
+
     flag = 11100000
     print(binary_to_decimal(flag))
     value = []
