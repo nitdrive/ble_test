@@ -40,16 +40,48 @@ class FitnessMachineFeature(Characteristic):
             ["read"], service)
 
     def ReadValue(self, options):
+        #                          <----------------------------------
         # fitnessMachineFeatures = 00000000 00000000 01000000 00000011
+        #                          <----------------------------------
         # targetSettingFeatures =  00000000 00000000 11100000 00001100
-        # fmfeaturesoctets = [00000011, 01000000, 00000000, 00000000]
-        # targetSettingoctets = [00001100, 11100000, 00000000, 00000000]
+        # fmfeaturesoctets = [00000011, 01000000, 00000000, 00000000] (little endian order)
+        # targetSettingoctets = [00001100, 11100000, 00000000, 00000000] (little endian order)
+        # Flags set based on Fitness Machine Service specification
+        # Refer to: https://www.bluetooth.com/specifications/specs/fitness-machine-service-1-0/
 
         return bytes([3, 64, 0, 0, 12, 224, 0, 0])
 
 
 class TrainingStatus(Characteristic):
-    pass
+    TRAINING_STATUS_CHARACTERISTIC_UUID = "0x2AD3"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.TRAINING_STATUS_CHARACTERISTIC_UUID,
+            ["notify", "read"], service)
+
+    def ReadValue(self, options):
+        return bytes([255])
+
+    def set_training_status_callback(self):
+        if self.notifying:
+            value = bytes([255])
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+
+        self.notifying = True
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": bytes([255])}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_training_status_callback)
+
+    def StopNotify(self):
+        self.notifying = False
 
 
 class FitnessMachineControlPoint(Characteristic):
