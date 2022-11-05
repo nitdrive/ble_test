@@ -16,7 +16,8 @@ class HERLParacycleAdvertisement(Advertisement):
         self.include_tx_power = True
         self.add_service_uuid("0x1818")
         self.add_service_uuid("0x1826")
-        self.add_service_data("0x1826", bytes.fromhex('012000'))
+        # self.add_service_data("0x1826", bytes.fromhex('012000'))
+        self.add_service_data("0x1826", bytes([1, 32, 0]))
 
 
 class HERLFitnessMachineService(Service):
@@ -28,13 +29,13 @@ class HERLFitnessMachineService(Service):
 
 
 class FitnessMachineFeature(Characteristic):
-    FITNESS_MACHINE_FEATURE_UUID = "0x2ACC"
+    FITNESS_MACHINE_FEATURE_CHARACTERISTIC_UUID = "0x2ACC"
 
     def __init__(self, service):
         self.notifying = False
 
         Characteristic.__init__(
-            self, self.FITNESS_MACHINE_FEATURE_UUID,
+            self, self.FITNESS_MACHINE_FEATURE_CHARACTERISTIC_UUID,
             ["read"], service)
 
 

@@ -20,6 +20,11 @@ if __name__ == '__main__':
     flags = bytes([224])
     print("224 as bytes")
     print(flags)
+    print("1, 32, 0 as bytes")
+    byte_val = bytes([1, 32, 0])
+    print(byte_val)
+    print(byte_val.hex())
+
     value.append(flags)
     hrate = random.randrange(60, 120)
     print(hrate)
@@ -37,5 +42,3 @@ if __name__ == '__main__':
 
     print("From Hex")
     print(bytes.fromhex('012000'))
-
-
