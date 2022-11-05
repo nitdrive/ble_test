@@ -27,6 +27,7 @@ class HERLFitnessMachineService(Service):
     def __init__(self, index):
         Service.__init__(self, index, self.HERL_FITNESS_MACHINE_UUID, True)
         self.add_characteristic(FitnessMachineFeature(self))
+        self.add_characteristic(TrainingStatus(self))
 
 
 class FitnessMachineFeature(Characteristic):
