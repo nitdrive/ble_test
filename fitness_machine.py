@@ -41,15 +41,15 @@ class FitnessMachineFeature(Characteristic):
             ["read"], service)
 
     def ReadValue(self, options):
-        #                          <----------------------------------
+        #                          <---------------------------------- read from left to right
         # fitnessMachineFeatures = 00000000 00000000 01000000 00000011
-        #                          <----------------------------------
+        #                          <---------------------------------- read from left to right
         # targetSettingFeatures =  00000000 00000000 11100000 00001100
         # fmfeaturesoctets = [00000011, 01000000, 00000000, 00000000] (little endian order)
         # targetSettingoctets = [00001100, 11100000, 00000000, 00000000] (little endian order)
         # Flags set based on Fitness Machine Service specification
         # Refer to: https://www.bluetooth.com/specifications/specs/fitness-machine-service-1-0/
-
+        # using the decimal value for each octet above to build a list and convert to bytes
         return bytes([3, 64, 0, 0, 12, 224, 0, 0])
 
 
@@ -86,46 +86,70 @@ class TrainingStatus(Characteristic):
 
 
 class FitnessMachineControlPoint(Characteristic):
-    pass
-
-
-class FitnessMachineStatus(Characteristic):
-    pass
-
-
-class IndoorBikeData(Characteristic):
-    pass
-
-
-class SupportedResistanceLevelRange(Characteristic):
-    pass
-
-
-class SupportedPowerRange(Characteristic):
-    pass
-
-
-class HeartRateMeasurementCharacteristic(Characteristic):
-    HEARTRATE_CHARACTERISTIC_UUID = "0x2A37"
+    FITNESS_MACHINE_CONTROL_POINT_CHARACTERISTIC_UUID = "0x2AD9"
 
     def __init__(self, service):
         self.notifying = False
 
         Characteristic.__init__(
-            self, self.HEARTRATE_CHARACTERISTIC_UUID,
-            ["notify"], service)
-        # self.add_descriptor(HeartRateDescriptor(self))
+            self, self.FITNESS_MACHINE_CONTROL_POINT_CHARACTERISTIC_UUID,
+            ["indicate", "write"], service)
 
-    def get_heartrate(self):
+    def WriteValue(self, value, options):
+        print("Received Value:")
+        print(value)
+
+
+class FitnessMachineStatus(Characteristic):
+    FITNESS_MACHINE_STATUS_CHARACTERISTIC_UUID = "0x2ADA"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.FITNESS_MACHINE_STATUS_CHARACTERISTIC_UUID,
+            ["notify"], service)
+
+    # Todo: Set proper status values based on BLE specification
+    def set_fitness_machine_status_callback(self):
+        if self.notifying:
+            value = bytes([2])
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+
+        self.notifying = True
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": bytes([2])}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_fitness_machine_status_callback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+
+class IndoorBikeData(Characteristic):
+    INDOOR_BIKE_DATA_CHARACTERISTIC_UUID = "0x2AD2"
+
+    def __init__(self, service):
+        self.notifying = False
+
+        Characteristic.__init__(
+            self, self.INDOOR_BIKE_DATA_CHARACTERISTIC_UUID,
+            ["notify"], service)
+
+    def get_indoor_bike_data(self):
         value = []
-        flags = bytes([224])
+        flags = bytes([224])  # b'\xe0'
         value.append(dbus.Byte(flags))
         hrate = random.randrange(60, 120)
         print("Heart Rate:" + str(hrate))
         value.append(dbus.Byte(bytes([hrate])))
         return value
 
-    def set_heartrate_callback(self):
+    def set_indoor_bike_data_callback(self):
         if self.notifying:
             value = self.get_heartrate()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
@@ -137,98 +161,43 @@ class HeartRateMeasurementCharacteristic(Characteristic):
             return
 
         self.notifying = True
-
-        value = self.get_heartrate()
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.get_indoor_bike_data()}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_indoor_bike_data_callback)
 
     def StopNotify(self):
         self.notifying = False
 
-    def ReadValue(self, options):
-        value = self.get_heartrate()
 
-        return value
-
-
-class HeartRateDescriptor(Descriptor):
-    HEARTRATE_DESCRIPTOR_UUID = "2901"
-    HEARTRATE_DESCRIPTOR_VALUE = "Heart Rate"
-
-    def __init__(self, characteristic):
-        Descriptor.__init__(
-            self, self.HEARTRATE_DESCRIPTOR_UUID,
-            ["read"],
-            characteristic)
-
-    def ReadValue(self, options):
-        value = []
-        desc = self.HEARTRATE_DESCRIPTOR_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
-
-
-class BodySensorLocation(Characteristic):
-    UNIT_CHARACTERISTIC_UUID = "0x2A38"
+class SupportedResistanceLevelRange(Characteristic):
+    SUPPORTED_RESISTANCE_LEVEL_CHARACTERISTIC_UUID = "0x2AD6"
 
     def __init__(self, service):
+        self.notifying = False
+
         Characteristic.__init__(
-            self, self.UNIT_CHARACTERISTIC_UUID,
+            self, self.SUPPORTED_RESISTANCE_LEVEL_CHARACTERISTIC_UUID,
             ["read"], service)
 
     def ReadValue(self, options):
-        value = []
-
-        val = "Chest"
-        value.append(dbus.Byte(val.encode()))
-
-        return value
+        return bytes([2])
 
 
-class HeartRateUnitCharacteristic(Characteristic):
-    UNIT_CHARACTERISTIC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
+class SupportedPowerRange(Characteristic):
+    SUPPORTED_POWER_RANGE_CHARACTERISTIC_UUID = "0x2AD8"
 
     def __init__(self, service):
+        self.notifying = False
+
         Characteristic.__init__(
-            self, self.UNIT_CHARACTERISTIC_UUID,
-            ["read", "write"], service)
-        self.add_descriptor(HeartRateUnitDescriptor(self))
-
-    def WriteValue(self, value, options):
-        print("Received Value:")
-        print(value)
-        # val = str(value[0]).upper()
+            self, self.SUPPORTED_POWER_RANGE_CHARACTERISTIC_UUID,
+            ["read"], service)
 
     def ReadValue(self, options):
-        value = []
-
-        val = "BPM"
-        value.append(dbus.Byte(val.encode()))
-
-        return value
-
-
-class HeartRateUnitDescriptor(Descriptor):
-    UNIT_DESCRIPTOR_UUID = "2901"
-    UNIT_DESCRIPTOR_VALUE = "Beats Per Minute (BPM)"
-
-    def __init__(self, characteristic):
-        Descriptor.__init__(
-            self, self.UNIT_DESCRIPTOR_UUID,
-            ["read"],
-            characteristic)
-
-    def ReadValue(self, options):
-        value = []
-        desc = self.UNIT_DESCRIPTOR_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
+        # min_power = 00000000 00000000 (0 W)
+        # max_power = 00000111 11010000 (2000 W)
+        # power_increments = 00000000 00000001 (1 W)
+        power = [0, 0, 208, 7, 1, 0]
+        return bytes(power)
 
 
 if __name__ == '__main__':
