@@ -130,7 +130,7 @@ class HeartRateMeasurementCharacteristic(Characteristic):
 
     def get_heartrate(self):
         value = []
-        flags = bytes([224])
+        flags = bytes([224])  # b'\xe0'
         value.append(dbus.Byte(flags))
         hrate = random.randrange(60, 120)
         print("Heart Rate:" + str(hrate))

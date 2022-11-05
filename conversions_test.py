@@ -18,6 +18,8 @@ if __name__ == '__main__':
     print(binary_to_decimal(flag))
     value = []
     flags = bytes([224])
+    print("224 as bytes")
+    print(flags)
     value.append(flags)
     hrate = random.randrange(60, 120)
     print(hrate)
@@ -32,4 +34,8 @@ if __name__ == '__main__':
 
     bytes_data = [104, 101, 108, 108, 111]
     print("".join(map(chr, bytes_data)))
+
+    print("From Hex")
+    print(bytes.fromhex('012000'))
+
 
