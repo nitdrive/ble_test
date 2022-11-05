@@ -14,6 +14,7 @@ class HERLParacycleAdvertisement(Advertisement):
         Advertisement.__init__(self, index, "peripheral")
         self.add_local_name("HERL FM")
         self.include_tx_power = True
+        self.add_service_uuid("0x1818")
         self.add_service_uuid("0x1826")
 
 
