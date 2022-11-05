@@ -1,0 +1,54 @@
+0 Average Speed Supported
+0 = False
+1 = True
+1 Cadence Supported
+0 = False
+1 = True
+2 Total Distance Supported
+0 = False
+1 = True
+3 Inclination Supported
+0 = False
+1 = True
+4 Elevation Gain Supported
+0 = False
+1 = True
+5 Pace Supported
+0 = False
+1 = True
+6 Step Count Supported
+0 = False
+1 = True
+7 Resistance Level Supported
+0 = False
+1 = True
+8 Stride Count Supported
+0 = False
+1 = True
+9 Expended Energy Supported
+0 = False
+1 = True
+10 Heart Rate Measurement Supported
+0 = False
+1 = True
+11 Metabolic Equivalent Supported
+Fitness Machine Service / Service Specification
+Bluetooth SIG Proprietary Page 21 of 78
+0 = False
+1 = True
+12 Elapsed Time Supported
+0 = False
+1 = True
+13 Remaining Time Supported
+0 = False
+1 = True
+14 Power Measurement Supported
+0 = False
+1 = True
+15 Force on Belt and Power Output Supported
+0 = False
+1 = True
+16 User Data Retention Supported
+0 = False
+1 = True
+17-31 Reserved for Future Use

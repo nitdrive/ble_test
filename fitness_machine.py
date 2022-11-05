@@ -16,7 +16,8 @@ class HERLParacycleAdvertisement(Advertisement):
         self.include_tx_power = True
         self.add_service_uuid("0x1818")
         self.add_service_uuid("0x1826")
-        # self.add_service_data("0x1826", bytes.fromhex('012000'))
+        # Set flags (8 bits) little endian represented with decimal 1, fitness machine (16 bits) little endian
+        # represented with decimal numbers 32 and 0
         self.add_service_data("0x1826", bytes([1, 32, 0]))
 
 
@@ -37,6 +38,14 @@ class FitnessMachineFeature(Characteristic):
         Characteristic.__init__(
             self, self.FITNESS_MACHINE_FEATURE_CHARACTERISTIC_UUID,
             ["read"], service)
+
+    def ReadValue(self, options):
+        # fitnessMachineFeatures = 00000000 00000000 01000000 00000011
+        # targetSettingFeatures =  00000000 00000000 11100000 00001100
+        # fmfeaturesoctets = [00000011, 01000000, 00000000, 00000000]
+        values = [3, 64, 0, 0]
+
+        return bytes(values)
 
 
 class TrainingStatus(Characteristic):

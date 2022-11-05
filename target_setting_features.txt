@@ -1,0 +1,54 @@
+0 Speed Target Setting Supported
+0 = False
+1 = True
+1 Inclination Target Setting Supported
+0 = False
+1 = True
+2 Resistance Target Setting Supported
+0 = False
+1 = True
+3 Power Target Setting Supported
+0 = False
+1 = True
+4 Heart Rate Target Setting Supported
+0 = False
+Fitness Machine Service / Service Specification
+Bluetooth SIG Proprietary Page 22 of 78
+1 = True
+5 Targeted Expended Energy Configuration Supported
+0 = False
+1 = True
+6 Targeted Step Number Configuration Supported
+0 = False
+1 = True
+7 Targeted Stride Number Configuration Supported
+0 = False
+1 = True
+8 Targeted Distance Configuration Supported
+0 = False
+1 = True
+9 Targeted Training Time Configuration Supported
+0 = False
+1 = True
+10 Targeted Time in Two Heart Rate Zones Configuration Supported
+0 = False
+1 = True
+11 Targeted Time in Three Heart Rate Zones Configuration Supported
+0 = False
+1 = True
+12 Targeted Time in Five Heart Rate Zones Configuration Supported
+0 = False
+1 = True
+13 Indoor Bike Simulation Parameters Supported
+0 = False
+1 = True
+14 Wheel Circumference Configuration Supported
+0 = False
+1 = True
+15 Spin Down Control Supported
+0 = False
+1 = True
+16 Targeted Cadence Configuration Supported
+0 = False
+1 = True
+17-31 Reserved for Future Use
