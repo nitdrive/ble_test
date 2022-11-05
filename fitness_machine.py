@@ -16,6 +16,7 @@ class HERLParacycleAdvertisement(Advertisement):
         self.include_tx_power = True
         self.add_service_uuid("0x1818")
         self.add_service_uuid("0x1826")
+        self.add_service_data("0x1826", "0x012000")
 
 
 class HERLFitnessMachineService(Service):
