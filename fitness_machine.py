@@ -64,11 +64,11 @@ class TrainingStatus(Characteristic):
             ["notify", "read"], service)
 
     def ReadValue(self, options):
-        return bytes([3])
+        return bytes([2])
 
     def set_training_status_callback(self):
         if self.notifying:
-            value = bytes([3])
+            value = bytes([2])
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -78,7 +78,7 @@ class TrainingStatus(Characteristic):
             return
 
         self.notifying = True
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": bytes([3])}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": bytes([2])}, [])
         self.add_timeout(NOTIFY_TIMEOUT, self.set_training_status_callback)
 
     def StopNotify(self):
