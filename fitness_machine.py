@@ -157,7 +157,7 @@ class IndoorBikeData(Characteristic):
 
     def set_indoor_bike_data_callback(self):
         if self.notifying:
-            value = self.get_heartrate()
+            value = self.get_indoor_bike_data()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
