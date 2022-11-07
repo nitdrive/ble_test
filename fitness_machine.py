@@ -185,10 +185,10 @@ class SupportedResistanceLevelRange(Characteristic):
             ["read"], service)
 
     def ReadValue(self, options):
-        minvalue = 0.0
-        maxvalue = 10.0
-        inc = 0.1
-        payload = struct.pack('<f', minvalue) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+        minvalue = 0
+        maxvalue = 100
+        inc = 1
+        payload = bytes([minvalue,  maxvalue, inc])
         return payload
 
 
