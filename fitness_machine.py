@@ -188,8 +188,8 @@ class SupportedResistanceLevelRange(Characteristic):
         minvalue = 0
         maxvalue = 100
         inc = 1
-        payload = b"\x01\x64\x00"
-        return bytes([0, 0, 208, 7, 1, 0])
+        payload = b"\x00\x01\x00\x64\x00\x00"
+        return payload
 
 
 class SupportedPowerRange(Characteristic):
