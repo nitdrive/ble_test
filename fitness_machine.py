@@ -188,7 +188,7 @@ class SupportedResistanceLevelRange(Characteristic):
         minvalue = 0
         maxvalue = 100
         inc = 1
-        payload = [0, 0, 64, 0, 1, 0]
+        payload = [0, 0, 100, 0, 1, 0]
         return bytes(payload)
 
 
