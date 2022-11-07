@@ -32,7 +32,7 @@ class HERLFitnessMachineService(Service):
         self.add_characteristic(FitnessMachineControlPoint(self))
         self.add_characteristic(FitnessMachineStatus(self))
         self.add_characteristic(IndoorBikeData(self))
-        #self.add_characteristic(SupportedResistanceLevelRange(self))
+        self.add_characteristic(SupportedResistanceLevelRange(self))
         self.add_characteristic(SupportedPowerRange(self))
 
 
