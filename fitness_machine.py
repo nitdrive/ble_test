@@ -165,7 +165,8 @@ class IndoorBikeData(Characteristic):
         value.extend(ins_speed)
 
         # Add the instantaneous cadence
-        ins_cadence = [0, 0]
+        cadence_oct1 = random.randrange(100, 150)
+        ins_cadence = [cadence_oct1, 0]
         value.extend(ins_cadence)
 
         # Add the instantaneous power
