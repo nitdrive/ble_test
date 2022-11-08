@@ -236,8 +236,6 @@ if __name__ == '__main__':
     adv = HERLParacycleAdvertisement(0)
     adv.register()
 
-    print(app.services)
-
     try:
         app.run()
     except KeyboardInterrupt:
