@@ -122,7 +122,7 @@ class FitnessMachineControlPoint(Characteristic):
             print("Received empty array")
 
     def write_ok(self):
-        data_array = [dbus.Byte(b"\x80\x00\x01")]
+        data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
         return data_array
 
     # Used to indicate
