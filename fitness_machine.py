@@ -6,7 +6,7 @@ from utils.gap.advertisement import Advertisement
 from utils.gatt.profile import Application, Service, Characteristic, Descriptor
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
-NOTIFY_TIMEOUT = 500
+NOTIFY_TIMEOUT = 400
 import struct
 
 
@@ -171,7 +171,7 @@ class IndoorBikeData(Characteristic):
         # bytes([68, 0, 250, 1, 0, 0, 0, 0])
         return bytes(value)
 
-    def set_indoor_bike_data_callback(self):
+    def bike_data_callback(self):
         if self.notifying:
             value = self.get_indoor_bike_data()
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
@@ -183,8 +183,9 @@ class IndoorBikeData(Characteristic):
             return
 
         self.notifying = True
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.get_indoor_bike_data()}, [])
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_indoor_bike_data_callback)
+        value = self.get_indoor_bike_data()
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.bike_data_callback)
 
     def StopNotify(self):
         self.notifying = False
