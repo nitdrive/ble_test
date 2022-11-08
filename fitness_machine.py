@@ -174,8 +174,8 @@ class IndoorBikeData(Characteristic):
         ins_power = [pow_oct1, 0]
         value.extend(ins_power)
 
-        # print("indoor_bike_data")
-        # print(value)
+        print("indoor_bike_data")
+        print(value)
 
         # bytes([68, 0, 250, 1, 0, 0, 0, 0])
         return bytes(value)
