@@ -132,6 +132,10 @@ class FitnessMachineControlPoint(Characteristic):
                 print("Sending ack Stop/Pause")
                 data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x02"), dbus.Byte(b"\x01")]
                 self.Indicate(data_array)
+            elif case == "11":
+                print("Sending ack Simulation Params")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(17), dbus.Byte(0), dbus.Byte(0), dbus.Byte(231), dbus.Byte(0), dbus.Byte(40), dbus.Byte(51), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
             else:
                 print(case)
                 print("Not implemented")
