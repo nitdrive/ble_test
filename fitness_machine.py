@@ -182,6 +182,22 @@ class IndoorBikeData(Characteristic):
         print("In callback done getting new value")
         return self.notifying
 
+    def get_heartrate(self):
+        value = []
+        flags = bytes([224])  # b'\xe0'
+        value.append(dbus.Byte(flags))
+        hrate = random.randrange(60, 120)
+        print("Heart Rate:" + str(hrate))
+        value.append(dbus.Byte(bytes([hrate])))
+        return value
+
+    def set_heartrate_callback(self):
+        if self.notifying:
+            value = self.get_heartrate()
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
     def StartNotify(self):
         print("In StartNotify started getting new value")
         if self.notifying:
@@ -190,12 +206,12 @@ class IndoorBikeData(Characteristic):
 
         self.notifying = True
         print("Getting initial value")
-        value = self.get_indoor_bike_data()
+        value = self.get_heartrate()
 
         print("Adding properties changed")
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         print("Adding timeout")
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_bike_data_callback)
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
         print("----------------------------")
 
     def StopNotify(self):
