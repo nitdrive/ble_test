@@ -134,7 +134,7 @@ class FitnessMachineControlPoint(Characteristic):
                 self.Indicate(data_array)
             elif case == "11":
                 print("Sending ack Simulation Params")
-                data_array = [dbus.Byte(b"\x80"), dbus.Byte(17), dbus.Byte(0), dbus.Byte(0), dbus.Byte(231), dbus.Byte(0), dbus.Byte(40), dbus.Byte(51), dbus.Byte(b"\x01")]
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(17), dbus.Byte(0), dbus.Byte(0), dbus.Byte(231), dbus.Byte(0), dbus.Byte(40), dbus.Byte(b"\x01")]
                 self.Indicate(data_array)
             else:
                 print(case)
@@ -202,17 +202,17 @@ class IndoorBikeData(Characteristic):
 
         # Add the instantaneous speed
         speed_oct1 = random.randrange(250, 255)
-        ins_speed = [speed_oct1, 1]
+        ins_speed = [621, 1]
         value.extend(ins_speed)
 
         # Add the instantaneous cadence
         cadence_oct1 = random.randrange(100, 150)
-        ins_cadence = [cadence_oct1, 0]
+        ins_cadence = [84, 0]
         value.extend(ins_cadence)
 
         # Add the instantaneous power
         pow_oct1 = random.randrange(5, 16)
-        ins_power = [pow_oct1, 0]
+        ins_power = [51, 0]
         value.extend(ins_power)
 
         # print("indoor_bike_data")
