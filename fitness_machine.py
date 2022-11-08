@@ -104,8 +104,30 @@ class FitnessMachineControlPoint(Characteristic):
     def WriteValue(self, value, options):
         print("Received Value:")
         print(value)
-        print("value:%s" % [bytes([v]) for v in value])
-        print("-------------------------------------------")
+        # get value from dbus array: dbus.Array([dbus.Byte(0)], signature=dbus.Signature('y'))
+        byte_array = [bytes([v]).hex() for v in value]
+
+        if len(byte_array) > 0:
+            case = byte_array[0]
+            print("Byte value")
+            print(case)
+            if case == "00":
+                # send ok
+                self.StartNotify()
+            else:
+                print(case)
+                print("Not implemented")
+        else:
+            print("Received empty array")
+
+    def write_ok(self):
+        data_array = [dbus.Byte(bytes([1]))]
+        return data_array
+
+    # Used to indicate
+    def StartNotify(self):
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.write_ok()}, [])
+
 
 
 class FitnessMachineStatus(Characteristic):

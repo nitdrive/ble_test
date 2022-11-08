@@ -49,47 +49,62 @@ def binary(num):
     return ''.join(padded)
 
 
+def int_from_bytes(byte_seq):
+    print(int.from_bytes(byte_seq, "little"))
+
+
+def hex_from_bytes(byte_seq):
+    hex_val = byte_seq.hex()
+    print(hex_val)
+    if hex_val == "00":
+        print("Equal")
+    else:
+        print("Not equal")
+
+
 if __name__ == '__main__':
-    minvalue = 0
-    maxvalue = 10.0
-    inc = 0.1
-    print([struct.pack('<f', minvalue), struct.pack('<f', maxvalue), struct.pack('<f', inc)])
-    payload = bytes([0]) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
-    print(payload)
-
-    payload = []
-    for c in "0.110.0":
-        payload.append(c.encode())
-
-    print(payload)
-
-    flag = 11100000
-    print(binary_to_decimal(flag))
-    value = []
-    flags = bytes([224])
-    print("224 as bytes")
-    print(flags)
-    print("1, 32, 0 as bytes")
-    byte_val = bytes([1, 32, 0])
-    print(byte_val)
-    print(byte_val.hex())
-    for by in byte_val:
-        print(type(by))
-
-    value.append(flags)
-    hrate = random.randrange(60, 120)
-    print(hrate)
-    value.append(bytes([224, 125]))
-    print(value)
-    val = 125
-    print(val.to_bytes(2, 'little'))
-
-    valstring = str(val)
-    for c in valstring:
-        print(c.encode())
-
-    bytes_data = [104, 101, 108, 108, 111]
-    print("".join(map(chr, bytes_data)))
-
-    print("From Hex")
-    print(bytes.fromhex('012000'))
+    int_from_bytes(b"\x00")
+    hex_from_bytes(b"\x00")
+    # minvalue = 0
+    # maxvalue = 10.0
+    # inc = 0.1
+    # print([struct.pack('<f', minvalue), struct.pack('<f', maxvalue), struct.pack('<f', inc)])
+    # payload = bytes([0]) + struct.pack('<f', maxvalue) + struct.pack('<f', inc)
+    # print(payload)
+    #
+    # payload = []
+    # for c in "0.110.0":
+    #     payload.append(c.encode())
+    #
+    # print(payload)
+    #
+    # flag = 11100000
+    # print(binary_to_decimal(flag))
+    # value = []
+    # flags = bytes([224])
+    # print("224 as bytes")
+    # print(flags)
+    # print("1, 32, 0 as bytes")
+    # byte_val = bytes([1, 32, 0])
+    # print(byte_val)
+    # print(byte_val.hex())
+    # for by in byte_val:
+    #     print(type(by))
+    #
+    # value.append(flags)
+    # hrate = random.randrange(60, 120)
+    # print(hrate)
+    # value.append(bytes([224, 125]))
+    # print(value)
+    # val = 125
+    # print(val.to_bytes(2, 'little'))
+    #
+    # valstring = str(val)
+    # for c in valstring:
+    #     print(c.encode())
+    #
+    # bytes_data = [104, 101, 108, 108, 111]
+    # print("".join(map(chr, bytes_data)))
+    #
+    # print("From Hex")
+    # print(bytes.fromhex('012000'))
