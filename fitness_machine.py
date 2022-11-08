@@ -148,25 +148,26 @@ class IndoorBikeData(Characteristic):
 
     def get_indoor_bike_data(self):
         value = []
-        flags = bytes([44, 0])  # b'\xe0'
-        value.append(flags)
+        flags = [68, 0]  # b'\xe0'
+        value.extend(flags)
 
         # Add the instantaneous speed
-        ins_speed = bytes([250, 1])
-        value.append(ins_speed)
+        ins_speed = [250, 1]
+        value.extend(ins_speed)
 
         # Add the instantaneous cadence
-        ins_cadence = bytes([0, 0])
-        value.append(ins_cadence)
+        ins_cadence = [0, 0]
+        value.extend(ins_cadence)
 
         # Add the instantaneous power
-        ins_power = bytes([0, 0])
-        value.append(ins_power)
+        ins_power = [0, 0]
+        value.extend(ins_power)
 
         print("indoor_bike_data")
         print(value)
 
-        return bytes([68, 0, 250, 1, 0, 0, 0, 0])
+        # bytes([68, 0, 250, 1, 0, 0, 0, 0])
+        return bytes(value)
 
     def set_indoor_bike_data_callback(self):
         if self.notifying:
