@@ -1,6 +1,8 @@
 import random
 import struct
 
+import dbus
+
 
 def binary_to_decimal(binary):
     binary1 = binary
