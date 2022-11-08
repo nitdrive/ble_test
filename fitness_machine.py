@@ -144,7 +144,7 @@ class IndoorBikeData(Characteristic):
 
         Characteristic.__init__(
             self, self.INDOOR_BIKE_DATA_CHARACTERISTIC_UUID,
-            ["notify"], service)
+            ["read", "notify"], service)
 
     def get_indoor_bike_data(self):
         value = []
@@ -182,6 +182,11 @@ class IndoorBikeData(Characteristic):
 
     def StopNotify(self):
         self.notifying = False
+
+    def ReadValue(self, options):
+        value = self.get_indoor_bike_data()
+
+        return value
 
 
 class SupportedResistanceLevelRange(Characteristic):
