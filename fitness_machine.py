@@ -146,6 +146,14 @@ class IndoorBikeData(Characteristic):
             self, self.INDOOR_BIKE_DATA_CHARACTERISTIC_UUID,
             ["read", "notify"], service)
 
+    def get_indoor_bike_data_packed(self):
+        bike_data = self.get_indoor_bike_data()
+        data_array = []
+        for byte in bike_data:
+            data_array.append(dbus.Byte(byte))
+
+        return data_array
+
     def get_indoor_bike_data(self):
         value = []
         flags = [68, 0]  # b'\xe0'
@@ -174,28 +182,12 @@ class IndoorBikeData(Characteristic):
     def set_bike_data_callback(self):
         print("In callback started getting new value")
         if self.notifying:
-            value = self.get_indoor_bike_data()
+            value = self.get_indoor_bike_data_packed()
             print("New value:")
             print(value)
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         print("In callback done getting new value")
-        return self.notifying
-
-    def get_heartrate(self):
-        value = []
-        flags = bytes([224])  # b'\xe0'
-        value.append(dbus.Byte(flags))
-        hrate = random.randrange(60, 120)
-        print("Heart Rate:" + str(hrate))
-        value.append(dbus.Byte(bytes([hrate])))
-        return value
-
-    def set_heartrate_callback(self):
-        if self.notifying:
-            value = self.get_heartrate()
-            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-
         return self.notifying
 
     def StartNotify(self):
@@ -206,12 +198,12 @@ class IndoorBikeData(Characteristic):
 
         self.notifying = True
         print("Getting initial value")
-        value = self.get_heartrate()
+        value = self.get_indoor_bike_data_packed()
 
         print("Adding properties changed")
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         print("Adding timeout")
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_heartrate_callback)
+        self.add_timeout(NOTIFY_TIMEOUT, self.set_bike_data_callback)
         print("----------------------------")
 
     def StopNotify(self):

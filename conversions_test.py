@@ -73,6 +73,8 @@ if __name__ == '__main__':
     byte_val = bytes([1, 32, 0])
     print(byte_val)
     print(byte_val.hex())
+    for by in byte_val:
+        print(type(by))
 
     value.append(flags)
     hrate = random.randrange(60, 120)
