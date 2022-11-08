@@ -148,11 +148,21 @@ class IndoorBikeData(Characteristic):
 
     def get_indoor_bike_data(self):
         value = []
-        flags = bytes([224])  # b'\xe0'
+        flags = bytes([44, 0])  # b'\xe0'
         value.append(dbus.Byte(flags))
-        hrate = random.randrange(60, 120)
-        print("Heart Rate:" + str(hrate))
-        value.append(dbus.Byte(bytes([hrate])))
+
+        # Add the instantaneous speed
+        ins_speed = bytes([250, 1])
+        value.append(ins_speed)
+
+        # Add the instantaneous cadence
+        ins_cadence = bytes([0, 0])
+        value.append(ins_cadence)
+
+        # Add the instantaneous power
+        ins_power = bytes([0, 0])
+        value.append(ins_power)
+
         return value
 
     def set_indoor_bike_data_callback(self):
