@@ -166,7 +166,7 @@ class IndoorBikeData(Characteristic):
         print("indoor_bike_data")
         print(value)
 
-        return bytes([44, 0, 250, 1, 0, 0, 0, 0])
+        return bytes([68, 0, 250, 1, 0, 0, 0, 0])
 
     def set_indoor_bike_data_callback(self):
         if self.notifying:
