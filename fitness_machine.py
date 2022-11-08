@@ -149,7 +149,7 @@ class IndoorBikeData(Characteristic):
     def get_indoor_bike_data(self):
         value = []
         flags = bytes([44, 0])  # b'\xe0'
-        value.append(dbus.Byte(flags))
+        value.append(flags)
 
         # Add the instantaneous speed
         ins_speed = bytes([250, 1])
