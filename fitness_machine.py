@@ -184,7 +184,10 @@ class IndoorBikeData(Characteristic):
         self.notifying = False
 
     def ReadValue(self, options):
+        print("Reading Bike Data")
         value = self.get_indoor_bike_data()
+        print("Bike Data")
+        print(value)
 
         return value
 
