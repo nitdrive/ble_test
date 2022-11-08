@@ -104,6 +104,7 @@ class FitnessMachineControlPoint(Characteristic):
     def WriteValue(self, value, options):
         print("Received Value:")
         print(value)
+        print("value:%s" % [bytes([v]) for v in value])
 
 
 class FitnessMachineStatus(Characteristic):
