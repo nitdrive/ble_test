@@ -114,20 +114,33 @@ class FitnessMachineControlPoint(Characteristic):
             if case == "00":
                 # send ok
                 print("Sending ack OK")
-                self.StartNotify()
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
+            elif case == "01":
+                print("Sending ack Reset")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
+            elif case == "02":
+                print("Sending ack Speed")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\xFA"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
+            elif case == "07":
+                print("Sending ack Start/Resume")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
+            elif case == "08":
+                print("Sending ack Stop/Pause")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x02"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
             else:
                 print(case)
                 print("Not implemented")
         else:
             print("Received empty array")
 
-    def write_ok(self):
-        data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
-        return data_array
-
     # Used to indicate
-    def StartNotify(self):
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.write_ok()}, [])
+    def Indicate(self, value):
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
 
 class FitnessMachineStatus(Characteristic):
