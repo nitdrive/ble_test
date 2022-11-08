@@ -113,6 +113,7 @@ class FitnessMachineControlPoint(Characteristic):
             print(case)
             if case == "00":
                 # send ok
+                print("Sending ack OK")
                 self.StartNotify()
             else:
                 print(case)
