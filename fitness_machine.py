@@ -192,6 +192,7 @@ class IndoorBikeData(Characteristic):
         print("Getting initial value")
         value = self.get_indoor_bike_data()
 
+        print("Adding properties changed")
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         print("Adding timeout")
         self.add_timeout(NOTIFY_TIMEOUT, self.set_bike_data_callback)
