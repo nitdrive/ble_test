@@ -126,7 +126,7 @@ class FitnessMachineControlPoint(Characteristic):
                 self.Indicate(data_array)
             elif case == "07":
                 print("Sending ack Start/Resume")
-                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x07"), dbus.Byte(b"\x01")]
                 self.Indicate(data_array)
             elif case == "08":
                 print("Sending ack Stop/Pause")
