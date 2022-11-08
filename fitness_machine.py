@@ -174,38 +174,28 @@ class IndoorBikeData(Characteristic):
         ins_power = [pow_oct1, 0]
         value.extend(ins_power)
 
-        print("indoor_bike_data")
-        print(value)
+        # print("indoor_bike_data")
+        # print(value)
 
         # bytes([68, 0, 250, 1, 0, 0, 0, 0])
         return bytes(value)
 
     def set_bike_data_callback(self):
-        print("In callback started getting new value")
         if self.notifying:
             value = self.get_indoor_bike_data_packed()
-            print("New value:")
-            print(value)
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
-        print("In callback done getting new value")
         return self.notifying
 
     def StartNotify(self):
-        print("In StartNotify started getting new value")
         if self.notifying:
-            print("Already set to notify")
             return
 
         self.notifying = True
-        print("Getting initial value")
         value = self.get_indoor_bike_data_packed()
 
-        print("Adding properties changed")
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        print("Adding timeout")
         self.add_timeout(NOTIFY_TIMEOUT, self.set_bike_data_callback)
-        print("----------------------------")
 
     def StopNotify(self):
         self.notifying = False
