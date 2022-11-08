@@ -61,6 +61,17 @@ def hex_from_bytes(byte_seq):
     else:
         print("Not equal")
 
+def dbus_to_convert():
+    value = dbus.Array([dbus.Byte(17), dbus.Byte(0), dbus.Byte(0), dbus.Byte(231), dbus.Byte(0), dbus.Byte(40), dbus.Byte(51)],
+               signature=dbus.Signature('y'))
+
+    print("value:%s" % ''.join([str(v) for v in value]))
+
+    print("value:%s" % [bytes([v]) for v in value])
+
+    print("value:%s" % [int(v) for v in value])
+
+
 
 if __name__ == '__main__':
     int_from_bytes(b"\x00")
