@@ -202,7 +202,7 @@ class IndoorBikeData(Characteristic):
 
         # Add the instantaneous speed
         speed_oct1 = random.randrange(250, 255)
-        ins_speed = [621, 1]
+        ins_speed = [109, 2]
         value.extend(ins_speed)
 
         # Add the instantaneous cadence

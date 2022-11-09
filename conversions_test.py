@@ -1,7 +1,6 @@
 import random
 import struct
 
-import dbus
 
 
 def binary_to_decimal(binary):
@@ -77,10 +76,11 @@ def dbus_to_convert():
 
 
 if __name__ == '__main__':
-    int_from_bytes(b"\x00")
-    hex_from_bytes(b"\x00")
-
-    dbus_to_convert()
+    # int_from_bytes(b"\x00")
+    # hex_from_bytes(b"\x00")
+    #
+    # dbus_to_convert()
+    print(bytes([2, 106]))
     # minvalue = 0
     # maxvalue = 10.0
     # inc = 0.1
