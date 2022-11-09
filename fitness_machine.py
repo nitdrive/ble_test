@@ -124,6 +124,10 @@ class FitnessMachineControlPoint(Characteristic):
                 print("Sending ack Speed")
                 data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\xFA"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
                 self.Indicate(data_array)
+            elif case == "05":
+                print("Sending ack Target Power")
+                data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x3C"), dbus.Byte(b"\x00"), dbus.Byte(b"\x01")]
+                self.Indicate(data_array)
             elif case == "07":
                 print("Sending ack Start/Resume")
                 data_array = [dbus.Byte(b"\x80"), dbus.Byte(b"\x07"), dbus.Byte(b"\x01")]
